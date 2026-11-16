@@ -1,0 +1,35 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: detect-private-key
+  - repo: local
+    hooks:
+      - id: kustomize
+        name: Validate Kustomizations (requires kustomize installed)
+        language: system
+        entry: bash -c 'dirname $@ | xargs -I {} kustomize build {} > /dev/null' --
+        files: kustomization.yaml
+  - repo: local
+    hooks:
+      - id: kubeconform
+        name: Validate Kubernetes manifests schemas (requires kubeconform installed)
+        language: system
+        entry: kubeconform
+        args:
+          - -strict
+          - -skip
+          - CustomResourceDefinition,NodeadmConfig
+          - -schema-location
+          - default
+          - -schema-location
+          - "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
+        files: ^gitops/.*
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.39.0
+    hooks:
+      - id: check-github-workflows

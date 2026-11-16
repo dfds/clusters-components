@@ -1,0 +1,6 @@
+[tools]
+minikube = "v1.38.1"
+flux-operator = "0.58.1"
+clusterawsadm = "2.13.1"
+aws-cli = "2.38.5"
+clusterctl = "v1.13.4"

@@ -1,0 +1,55 @@
+---
+apiVersion: addons.cluster.x-k8s.io/v1alpha1
+kind: HelmChartProxy
+metadata:
+  name: flux-operator
+  namespace: ${namespace}
+spec:
+  clusterSelector:
+    matchLabels:
+      cluster.x-k8s.io/cluster-purpose: management
+  repoURL: oci://ghcr.io/controlplaneio-fluxcd/charts
+  version: 0.62.1
+  chartName: flux-operator
+  namespace: flux-system
+  options:
+    waitForJobs: true
+    wait: true
+    timeout: 5m
+    install:
+      createNamespace: true
+  valuesTemplate: |
+
+---
+apiVersion: addons.cluster.x-k8s.io/v1alpha1
+kind: HelmChartProxy
+metadata:
+  name: flux-instance
+  namespace: ${namespace}
+spec:
+  clusterSelector:
+    matchLabels:
+      cluster.x-k8s.io/cluster-purpose: management
+  repoURL: oci://ghcr.io/controlplaneio-fluxcd/charts
+  version: 0.62.1
+  chartName: flux-instance
+  namespace: flux-system
+  options:
+    waitForJobs: true
+    wait: true
+    timeout: 5m
+    install:
+      createNamespace: true
+  valuesTemplate: |
+    instance:
+      distribution:
+        version: 2.9.6
+      sync:
+        interval: 5m
+        kind: GitRepository
+        url: "https://github.com/dfds/clusters.git"
+        ref: "${branch}"
+        path: "${name}-${namespace}"
+        name: flux-system
+        provider: github
+        pullSecret: githubapp
