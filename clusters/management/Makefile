@@ -1,7 +1,8 @@
 SHELL := /usr/bin/env bash
 
 NAME ?= management
-NAMESPACE ?= management
+GENERATION ?= 0
+NAMESPACE ?= management-$(GENERATION)
 ACCOUNT_ID := $(shell aws sts get-caller-identity --query Account --output text)
 
 apply:

@@ -48,7 +48,7 @@ spec:
         interval: 5m
         kind: GitRepository
         url: "https://github.com/dfds/clusters.git"
-        ref: "${branch}"
+        ref: refs/heads/${branch}
         path: "${name}-${namespace}"
         name: flux-system
         provider: github

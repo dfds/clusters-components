@@ -1,7 +1,8 @@
 SHELL := /usr/bin/env bash
 
 NAME ?= management
-NAMESPACE ?= management
+GENERATION ?= 0
+NAMESPACE ?= management-$(GENERATION)
 BRANCH ?= main
 GITHUB_APP_ID := ${GITHUB_APP_ID}
 GITHUB_APP_INSTALLATION_ID := ${GITHUB_APP_INSTALLATION_ID}
